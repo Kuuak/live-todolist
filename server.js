@@ -9,7 +9,8 @@ const ent			= require( 'ent' );
 const isNull	= require( 'lodash.isnull' );
 const isEmpty	= require( 'lodash.isempty' );
 
-let tasks = [];
+// Initialize an empty task list
+let tasks = Array();
 
 app
 	// Set up the static folder
