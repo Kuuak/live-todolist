@@ -30,11 +30,6 @@ io.on( 'connection', socket => {
 
 	// Listen to client events
 	socket
-		.on( 'getTasks', data => {
-			// Send the task list to client
-			socket.emit( 'updateTasks', tasks );
-		} )
-
 		.on( 'addTask', data => {
 
 			if ( isEmpty( data ) ) {
@@ -64,6 +59,8 @@ io.on( 'connection', socket => {
 			socket.broadcast.emit( 'updateTasks', tasks );
 		} );
 
+	// Send the task list to client
+	socket.emit( 'updateTasks', tasks );
 } );
 
 
