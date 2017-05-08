@@ -38,7 +38,7 @@ io.on( 'connection', socket => {
 			}
 
 			// Save the new task
-			tasks.push( ent(data) );
+			tasks.push( ent.encode(data) );
 
 			// Broadcast the updated task list
 			socket.broadcast.emit( 'updateTasks', tasks );
