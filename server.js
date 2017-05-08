@@ -9,6 +9,8 @@ const ent			= require( 'ent' );
 const isNull	= require( 'lodash.isnull' );
 const isEmpty	= require( 'lodash.isempty' );
 
+let tasks = [];
+
 app
 	// Set up the static folder
 	.use( express.static( __dirname +'/public' ) )
@@ -24,7 +26,43 @@ app
 
 // Listen to WebSocket connections
 io.on( 'connection', socket => {
-	console.log( 'New connection' );
+
+	// Listen to client events
+	socket
+		.on( 'getTasks', data => {
+			// Send the task list to client
+			socket.emit( 'updateTasks', tasks );
+		} )
+
+		.on( 'addTask', data => {
+
+			if ( isEmpty( data ) ) {
+				// avoid adding empty task
+				return;
+			}
+
+			// Save the new task
+			tasks.push( ent(data) );
+
+			// Broadcast the updated task list
+			socket.broadcast.emit( 'updateTasks', tasks );
+
+		} )
+
+		.on( 'removeTask', data => {
+
+			if ( isEmpty(data) || isNaN( parseInt( data ) ) ) {
+				// avoid removing task if no correct index given
+				return;
+			}
+
+			// Remove task at the desired index
+			tasks.splice( parseInt( data ), 1 );
+
+			// Broadcast the updated task list
+			socket.broadcast.emit( 'updateTasks', tasks );
+		} );
+
 } );
 
 
