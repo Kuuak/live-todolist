@@ -40,7 +40,8 @@ io.on( 'connection', socket => {
 			// Save the new task
 			tasks.push( ent.encode(data) );
 
-			// Broadcast the updated task list
+			// Send & broadcast the updated task list
+			socket.emit( 'updateTasks', tasks );
 			socket.broadcast.emit( 'updateTasks', tasks );
 
 		} )
@@ -55,7 +56,8 @@ io.on( 'connection', socket => {
 			// Remove task at the desired index
 			tasks.splice( parseInt( data ), 1 );
 
-			// Broadcast the updated task list
+			// Send & broadcast the updated task list
+			socket.emit( 'updateTasks', tasks );
 			socket.broadcast.emit( 'updateTasks', tasks );
 		} );
 
